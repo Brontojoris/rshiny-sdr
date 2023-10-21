@@ -1,0 +1,6 @@
+## .REnviron file for OriginRS Shiny App
+## To reload run readRenviron(paste0(getwd(),"/.Renviron"))
+APP_TITLE =
+AW_REPORTSUITE_ID =
+AW_USERNAME =
+AW_SECRET =
