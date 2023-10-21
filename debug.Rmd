@@ -1,0 +1,55 @@
+---
+title: "Report Suite Configuration"
+output: html_notebook
+---
+
+## Introduction
+
+This script will output the Adobe Analytics `Sys.getenv('AW_REPORTSUITE_ID')` report suite as an Excel spreadsheet.
+
+## Get the data
+
+```{r Setup / Config / Inititalise, echo=FALSE}
+library(RSiteCatalyst, xlsx)
+
+SCAuth(Sys.getenv('AW_USERNAME'), Sys.getenv('AW_SECRET'), debug.mode = TRUE) # Login
+rsid = Sys.getenv('AW_REPORTSUITE_ID')
+all_rs = GetReportSuites()
+
+rs = list("id" = rsid)
+rs$"segments" = GetSegments(rs$id)
+rs$"elements" = GetElements(rs$id)
+# rs$"dwelements" = GetElements(rs$id, report.type = "warehouse")
+rs$"metrics" = GetMetrics(rs$id)
+rs$"evars" = GetEvars(rs$id)
+rs$"listvars" = GetListVariables(rs$id)
+rs$"props" = GetProps(rs$id)
+rs$"calcmetrics" = GetCalculatedMetrics(rs$id)
+# rs$"dwmetrics" = GetMetrics(rs$id, report.type = "warehouse")
+rs$"paidsearch" = GetPaidSearchDetection(rs$id)
+rs$processingRules = tryCatch(expr = {ViewProcessingRules(rs$id)})
+rs$"marketing" = list(
+	"channels" = GetMarketingChannels(rs$id),
+	"rules" = GetMarketingChannelRules(rs$id),
+	"expiration" = GetMarketingChannelExpiration(rs$id)
+)
+
+date.from = Sys.Date()-7
+date.to = Sys.Date()
+
+segments = list()
+metrics = list()
+```
+
+## Save the data to Excel
+
+```{r Export, echo=FALSE}
+rs_label = all_rs[all_rs$rsid==rsid,2]
+file_name = paste0(rs_label, "_", Sys.Date(), ".xlsx")
+xlsx::write.xlsx2(rs$props, file_name, sheetName="Traffic Variables (props)", append=TRUE)
+xlsx::write.xlsx2(rs$evar, file_name, sheetName="Conversion Variables (eVars)", append=TRUE)
+xlsx::write.xlsx2(rs$metrics, file_name, sheetName="Success Events (metrics)", append=TRUE)
+xlsx::write.xlsx2(rs$listvars, file_name, sheetName="List Variables (listVars)", append=TRUE)
+xlsx::write.xlsx2(rs$paidsearch, file_name, sheetName="Search Configuration", append=TRUE)
+xlsx::write.xlsx2(rs$processingRules, file_name, sheetName="Processing Rules", append=TRUE)
+```
