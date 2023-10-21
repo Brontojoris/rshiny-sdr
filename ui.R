@@ -2,7 +2,7 @@ library(DataCache)
 rsid = Sys.getenv('AW_REPORTSUITE_ID')
 appCache = cache.info(cache.dir="cache", cache.name=rsid)
 appCacheCreated = appCache[1, "created"]
-appCacheAgeMins = round(appCache[1, "age_mins"])
+appCacheAgeMins = 1
 
 navbarPage(
 	title = Sys.getenv('APP_TITLE'),
