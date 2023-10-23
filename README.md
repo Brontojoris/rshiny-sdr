@@ -47,3 +47,4 @@ The ‘legacy’ method of authenticating with the Adobe Analytics API requires 
 * Improve caching, expire old caches
 * Address permissions issues on `cache` folder
 * Better handling of errors.
+* Switch to OAuth for Authentication
