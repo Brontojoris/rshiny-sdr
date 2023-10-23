@@ -79,7 +79,9 @@ tableOptions = list(
 	paging = FALSE,
 	orderClasses = TRUE,
 	dom = 'Bfr',
-	buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+	buttons = list("copy", list(extend = "collection",
+		buttons = c("csv", "excel", "pdf"), text = "Download")
+	),
 	searchHighlight = TRUE
 )
 
