@@ -16,6 +16,9 @@ appCache = cache.info(cache.dir="cache", cache.name=rsid)
 getConfiguration = function(rsid){
 	SCAuth(Sys.getenv('AW_USERNAME'), Sys.getenv('AW_SECRET'), debug.mode = FALSE)
 
+	# GET REPORT SUITES #### #####################################################
+	reportSuites = GetReportSuites()
+
 	# GET PROPS #### #############################################################
 	props = GetProps(rsid)
 	props = subset(props, select = -c(enabled, participation_enabled, case_insensitive, case_insensitive_date_enabled, report_suite)) # delete some cols
@@ -64,7 +67,8 @@ getConfiguration = function(rsid){
 		"listvars" =    listvars,
 		"procRules" =   procRules,
 		"mktChannels" = mktChannels,
-		"mktProcRules"= mktProcRules
+		"mktProcRules"= mktProcRules,
+		"reportSuites"= reportSuites
 	)
 
 	return(results)
@@ -79,7 +83,8 @@ tableOptions = list(
 	searchHighlight = TRUE
 )
 
-## unlink('cache', recursive=TRUE, force=TRUE)
+## Uncomment during dev, and to force cache refresh
+#unlink('cache', recursive=TRUE, force=TRUE)
 data.cache(getConfiguration, cache.name=rsid, rsid=rsid, frequency = "hourly")
 
 function(input, output) {
@@ -148,5 +153,23 @@ function(input, output) {
 			rownames = FALSE
 		)
 		%>% formatStyle(c('Query String','Hit Attribute','Hit Query Param','Matches'), fontFamily = 'monospace')
+	)
+
+	# [REPORT SUITES]
+	output$reportSuitesTBL <- renderDataTable(
+		datatable(
+			data = reportSuites,
+			options = tableOptions,
+			rownames = FALSE
+		)
+	)
+
+	# [CACHE]
+	output$cacheTBL <- renderDataTable(
+		datatable(
+			data = appCache,
+			options = tableOptions,
+			rownames = FALSE
+		)
 	)
 }
