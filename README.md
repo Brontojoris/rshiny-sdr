@@ -1,6 +1,8 @@
 # R Shiny SDR
  Adobe Solution Design Reference site built using R Shiny and RSiteCatalyst
 
+[Demo](https://jorisdebeer.shinyapps.io/rshiny-sdr/)
+
 ![Screenshot of Shiny App display traffic variables](./rshiny-sdr-screenshot.png)
 
 ## Requires
@@ -36,3 +38,12 @@ The ‘legacy’ method of authenticating with the Adobe Analytics API requires 
 * **AW_REPORTSUITE_ID** The report suite id
 * **AW_USERNAME** Your WSSE username
 * **AW_SECRET** Your WSSE secret
+
+## To do
+
+* Add basic username/password option
+* Add report suite selector
+* Add data previews for props, evars, and events
+* Improve caching, expire old caches
+* Address permissions issues on `cache` folder
+* Better handling of errors.
