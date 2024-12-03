@@ -53,3 +53,9 @@ xlsx::write.xlsx2(rs$listvars, file_name, sheetName="List Variables (listVars)",
 xlsx::write.xlsx2(rs$paidsearch, file_name, sheetName="Search Configuration", append=TRUE)
 xlsx::write.xlsx2(rs$processingRules, file_name, sheetName="Processing Rules", append=TRUE)
 ```
+
+## Data Previews
+
+```{r}
+QueueRanked(rsid, date.from, date.to, metrics="instances", elements = "server")
+```
