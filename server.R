@@ -25,6 +25,9 @@ getConfiguration = function(rsid){
 	props = props[, c("id", "name", "pathing_enabled", "list_enabled", "list_delimiter", "description") ] # change col order
 	colnames(props) = c("Prop", "Label", "Pathing", "List Support", "Delimiter", "Description")
 
+	# Link each prop
+	props$Prop = paste("<a href='/somewhere'>", props$Prop, "</a>", sep="")
+	
 	# GET EVARS #### #############################################################
 	evars = GetEvars(rsid)
 	evars = subset(evars, select = -c(enabled, has_custom_name_matching_default, expiration_custom_days, report_suite)) # delete some cols
@@ -101,10 +104,11 @@ function(input, output) {
 			extensions = tableExtensions,
 			options = tableOptions,
 			rownames = FALSE,
+			escape = FALSE
 		),
 		server = FALSE
 	)
-
+	
 	# [EVARS] - Conversion Variables ####
 	output$evarsTBL <- renderDataTable(
 		datatable(

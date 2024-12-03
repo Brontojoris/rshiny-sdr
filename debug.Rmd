@@ -57,5 +57,7 @@ xlsx::write.xlsx2(rs$processingRules, file_name, sheetName="Processing Rules", a
 ## Data Previews
 
 ```{r}
-QueueRanked(rsid, date.from, date.to, metrics="instances", elements = "server")
+popoverData = QueueRanked(rsid, date.from, date.to, metrics="instances", elements = "server", top="5")
+
+popoverData$name = paste0('<a href="">', popoverData$name, '</a>')
 ```

@@ -1,0 +1,169 @@
+# Displaying Popovers on a Shiny Datatable
+
+From <https://stackoverflow.com/questions/48898033/show-a-tooltip-or-popover-in-shiny-datatables-for-each-cell>
+
+## Answer 1
+
+```{r}
+library(shiny)
+library(DT)
+
+shinyApp(
+  ui = fluidPage(
+    dataTableOutput('table'),
+    verbatimTextOutput('hoverIndex')
+  ),
+
+  server = function(server, input, output) {
+
+    output$hoverIndex <- renderText({
+      paste("hover column info", input$hoverIndexJS)
+    })
+
+    output$table <- renderDataTable({
+      datatable(data.frame(`A` = 1:5, `B` = 11:15, `C` = LETTERS[1:5]),
+                rownames = F,
+                callback = JS("
+                  table.on('mouseenter', 'td', function() {
+                    Shiny.onInputChange('hoverIndexJS', this.innerHTML);
+                  });
+                  return table;
+                ")
+      )
+    })
+  }
+)
+```
+
+## Answer 2
+
+```{r}
+library(shiny)
+library(DT)
+
+shinyApp(
+  ui = fluidPage(
+    dataTableOutput('tableWithHoverEffect'),
+    dataTableOutput('tableWithHoverData')
+  ),
+
+  server = function(session, input, output) {
+
+    observeEvent(input$hoveredCellInfo, {
+      info <- input$hoveredCellInfo
+      content <- as.character(table2[info$row, info$column])
+    })
+
+    table1 <- data.frame(A = 1:5, B = 11:15, C = LETTERS[1:5])
+    table2 <- data.frame(D = 10:14, E = LETTERS[6:10], F = c(T, F, F, T, T))
+
+    output$tableWithHoverEffect <- renderDataTable({
+      datatable(table1, rownames = F,
+                callback = JS("
+                              table.on('mouseenter', 'tbody td', function() {
+                                var column = $(this).index();
+                                var row = $(this).parent().index();
+
+                                var dataFromOtherTable = $('#tableWithHoverData').find('tbody tr').eq(row).find('td').eq(column).text();
+
+                                this.setAttribute('title', dataFromOtherTable);
+                              });
+
+                              return table;
+                              ")
+                )
+    })
+
+    output$tableWithHoverData <- renderDataTable({
+      datatable(table2, rownames = F)
+    })
+  }
+)
+```
+
+```{r}
+library(shiny)
+library(DT)
+
+fluidPage(
+  titlePanel("UC Berkley Admissions"),
+
+  mainPanel(
+    tabsetPanel(
+      id = 'dataset',
+      tabPanel("Sample Bank", 
+
+               DT::dataTableOutput("banking.df_data"),
+               br(),
+               actionButton("viewBtn","View"),
+               br(),
+               actionButton("saveBtn","Save"),
+               br(),
+               DT::dataTableOutput("updated.df")
+               ))))
+
+```
+
+```{r}
+Admit<-c("Admitted","Rejected","Admitted", "Rejected", "Admitted", "Rejected", "Admitted",
+         "Rejected","Admitted", "Rejected", "Admitted","Rejected","Admitted", "Rejected","Admitted","Rejected", "Admitted", "Rejected",
+         "Admitted","Rejected", "Admitted" ,"Rejected","Admitted", "Rejected")
+Gender<-c("Male","Male","Female","Female", "Male",   "Male",   "Female", "Female", "Male","Male","Female","Female",
+          "Male","Male","Female","Female","Male",   "Male",   "Female", "Female","Male","Male","Female","Female")
+Dept<-c( "A","A", "A", "A", "B", "B", "B", "B", "C", "C", "C", "C", "D", "D", "D", "D", "E", "E", "E", "E", "F", "F", "F", "F")
+Freq<-c("512", "313",  "89",  "19", "353", "207",  "17",   "8", "120", "205", "202", "391", "138", "279", "131", "244",  "53", "138",
+        "94", "299",  "22", "351",  "24", "317")
+
+banking.df<-data.frame(Admit,Gender,Dept, Freq,stringsAsFactors = FALSE)
+d1 = banking.df
+d1$Date = Sys.time() + seq_len(nrow(d1))
+
+function(input, output) {
+
+
+  output$banking.df_data<-renderDataTable(
+    d1,selection = 'none', editable = TRUE, 
+    rownames = TRUE,
+    extensions = 'Buttons',
+
+    options = list(
+      paging = TRUE,
+      searching = TRUE,
+      fixedColumns = TRUE,
+      autoWidth = TRUE,
+      ordering = TRUE,
+      dom = 'Bfrtip',
+      buttons = c('csv', 'excel')
+    ),
+
+    class = "display"
+  )
+
+
+  observeEvent(input$banking.df_data_cell_edit, {
+    d1[input$banking.df_data_cell_edit$row,input$banking.df_data_cell_edit$col] <<- input$banking.df_data_cell_edit$value
+  })
+
+ view_fun<-eventReactive(input$viewBtn,{
+    if(is.null(input$saveBtn)||input$saveBtn==0)
+    {
+      returnValue()
+    }
+    else
+    {
+     DT::datatable(d1,selection = 'none')
+    }
+
+  })
+
+
+  observeEvent(input$saveBtn,{
+    write.csv(d1,'test.csv')
+  })
+
+  output$updated.df<-renderDataTable({
+    view_fun()
+  }
+  )
+}
+```
