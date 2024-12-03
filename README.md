@@ -1,5 +1,6 @@
 # R Shiny SDR
- Adobe Solution Design Reference site built using R Shiny and RSiteCatalyst
+
+Adobe Solution Design Reference site built using R Shiny and RSiteCatalyst
 
 [Demo](https://jorisdebeer.shinyapps.io/rshiny-sdr/)
 
@@ -7,44 +8,43 @@
 
 ## Requires
 
- Expects the following packages installed:
+Expects the following packages installed:
 
 ### Definitely
 
-* [shiny](https://github.com/rstudio/shiny)
-* [shinyBS](https://ebailey78.github.io/shinyBS/)
-* [DT](https://rstudio.github.io/DT/)
-* [RSiteCatalyst](https://randyzwitch.com/rsitecatalyst/)
-* [DataCache](https://github.com/jbryer/DataCache)
+-   [shiny](https://github.com/rstudio/shiny)
+-   [shinyBS](https://ebailey78.github.io/shinyBS/)
+-   [DT](https://rstudio.github.io/DT/)
+-   [RSiteCatalyst](https://randyzwitch.com/rsitecatalyst/)
+-   [DataCache](https://github.com/jbryer/DataCache)
 
 ### Maybe
 
-* [ggplot2](https://ggplot2.tidyverse.org/)
-* [readxl](https://readxl.tidyverse.org/)
-* [dplyr](https://dplyr.tidyverse.org/)
+-   [ggplot2](https://ggplot2.tidyverse.org/)
+-   [readxl](https://readxl.tidyverse.org/)
+-   [dplyr](https://dplyr.tidyverse.org/)
 
 ## Authentication
 
 This Shiny app relies on [RSiteCatalyst for authentication](https://marketing.adobe.com/developer/documentation/authentication-1/using-web-service-credentials-2) with Adobe's Analytics API.
 
-> Legacy (WSSE)
-The ‘legacy’ method of authenticating with the Adobe Analytics API requires knowing your User Name and Shared Secret, which can be obtained from the same User Management -> Users -> Access menu in the Admin panel where Web Services Access is granted.
+> Legacy (WSSE) The ‘legacy’ method of authenticating with the Adobe Analytics API requires knowing your User Name and Shared Secret, which can be obtained from the same User Management -\> Users -\> Access menu in the Admin panel where Web Services Access is granted.
 
 ## Configuration
 
 `.Renviron` contains the following settings
 
-* **APP_TITLE** Name to put in the top left corner. eg, Company Name
-* **AW_REPORTSUITE_ID** The report suite id
-* **AW_USERNAME** Your WSSE username
-* **AW_SECRET** Your WSSE secret
+-   **APP_TITLE** Name to put in the top left corner. eg, Company Name
+-   **AW_REPORTSUITE_ID** The report suite id
+-   **AW_USERNAME** Your WSSE username
+-   **AW_SECRET** Your WSSE secret
 
 ## To do
 
-* Add basic username/password option
-* Add report suite selector
-* Add data previews for props, evars, and events
-* Improve caching, expire old caches
-* Address permissions issues on `cache` folder
-* Better handling of errors.
-* Switch to OAuth for Authentication
+-   Add basic username/password option
+-   Add report suite selector
+-   Add data previews for props, evars, and events
+-   Improve caching, expire old caches
+-   Address permissions issues on `cache` folder
+-   Better handling of errors.
+-   Switch to OAuth for Authentication
