@@ -73,16 +73,19 @@ getConfiguration = function(rsid){
 
 	return(results)
 }
-
+tableExtensions = c('Buttons', 'ColReorder')
 tableOptions = list(
+	rowId = 0,
 	pageLength = -1,
 	paging = FALSE,
 	orderClasses = TRUE,
-	dom = 'Bfr',
-	buttons = list("copy", list(extend = "collection",
-		buttons = c("csv", "excel", "pdf"), text = "Download")
+	dom = 'Blfrtip',
+	buttons = list('copy', 'colvis', list(extend = "collection",
+		buttons = list('csv', 'excel', 'pdf'), text = 'Download')
 	),
-	searchHighlight = TRUE
+	colReorder = TRUE,
+	searchHighlight = TRUE,
+	selection = "single"
 )
 
 ## Uncomment during dev, and to force cache refresh
@@ -95,16 +98,18 @@ function(input, output) {
 	output$propsTBL <- renderDataTable(
 		datatable(
 			data = props,
+			extensions = tableExtensions,
 			options = tableOptions,
 			rownames = FALSE,
-			extensions = c('Buttons', 'ColReorder')
-		)
+		),
+		server = FALSE
 	)
 
 	# [EVARS] - Conversion Variables ####
 	output$evarsTBL <- renderDataTable(
 		datatable(
 			data = evars,
+			extensions = tableExtensions,
 			options = tableOptions,
 			rownames = FALSE
 		)
@@ -114,6 +119,7 @@ function(input, output) {
 	output$eventsTBL <- renderDataTable(
 		datatable(
 			data = events,
+			extensions = tableExtensions,
 			options = tableOptions,
 			rownames = FALSE
 		)
@@ -123,6 +129,7 @@ function(input, output) {
 	output$listvarsTBL <- renderDataTable(
 		datatable(
 			data = listvars,
+			extensions = tableExtensions,
 			options = tableOptions,
 			rownames = FALSE
 		)
@@ -142,6 +149,7 @@ function(input, output) {
 	output$mktChannelsTBL <- renderDataTable(
 		datatable(
 			data = mktChannels,
+			extensions = tableExtensions,
 			options = tableOptions,
 			rownames = FALSE
 		)
@@ -161,6 +169,7 @@ function(input, output) {
 	output$reportSuitesTBL <- renderDataTable(
 		datatable(
 			data = reportSuites,
+			extensions = tableExtensions,
 			options = tableOptions,
 			rownames = FALSE
 		)
@@ -170,8 +179,11 @@ function(input, output) {
 	output$cacheTBL <- renderDataTable(
 		datatable(
 			data = appCache,
+			extensions = tableExtensions,
 			options = tableOptions,
 			rownames = FALSE
 		)
 	)
+	
+
 }
