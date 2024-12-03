@@ -49,3 +49,4 @@ po/*~
 rsconnect/
 .DS_Store
 debug.nb.html
+^PostRequest_*.json
