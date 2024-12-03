@@ -25,6 +25,6 @@ navbarPage(
 	<footer style=\"border-top:1px solid #ddd;padding:10px 0px;margin:15px 15px;font-size:11px;color: #888;\">",
 	"Report Suite: ", "<code>", rsid, "</code>",
 	" Cached: ", "<code>", appCacheCreated, "</code>",
-	" Age: ", "<code>", appCacheAgeMins, " mins</code>","</footer>"))
+	" Age: ", "<code>", appCacheAgeMins, " minutes</code>","</footer>"))
 
 )
